@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}{{ accion }}{% endblock %}
+{% block content %}
+<h1>{{ accion }}</h1>
+<form method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="id_username">Usuario</label>
+    {{ form.username }}
+    {% if form.username.errors %}<div class="error">{{ form.username.errors }}</div>{% endif %}
+  </div>
+  <div class="form-group">
+    <label for="id_email">Email</label>
+    {{ form.email }}
+    {% if form.email.errors %}<div class="error">{{ form.email.errors }}</div>{% endif %}
+  </div>
+  {% if form.password1 %}
+  <div class="form-group">
+    <label for="id_password1">Contraseña</label>
+    {{ form.password1 }}
+    {% if form.password1.errors %}<div class="error">{{ form.password1.errors }}</div>{% endif %}
+  </div>
+  <div class="form-group">
+    <label for="id_password2">Confirmar contraseña</label>
+    {{ form.password2 }}
+    {% if form.password2.errors %}<div class="error">{{ form.password2.errors }}</div>{% endif %}
+  </div>
+  {% endif %}
+  <div class="form-group">
+    <label for="id_role">Rol</label>
+    {{ form.role }}
+    {% if form.role.errors %}<div class="error">{{ form.role.errors }}</div>{% endif %}
+  </div>
+  <div class="form-group">
+    <label for="id_is_active">Activo</label>
+    {{ form.is_active }}
+    {% if form.is_active.errors %}<div class="error">{{ form.is_active.errors }}</div>{% endif %}
+  </div>
+  <button type="submit" class="btn">Guardar</button>
+  <a href="{% url 'usuarios_list' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
