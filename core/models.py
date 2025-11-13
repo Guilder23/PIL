@@ -18,3 +18,14 @@ class PerfilUsuario(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ({self.get_role_display()})"
+
+class SidebarPermission(models.Model):
+    role = models.CharField(max_length=10, choices=PerfilUsuario.ROLE_CHOICES)
+    key = models.CharField(max_length=50)
+    enabled = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('role', 'key')
+
+    def __str__(self):
+        return f"{self.role}:{self.key}={'on' if self.enabled else 'off'}"

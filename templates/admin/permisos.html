@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Permisos del Sidebar{% endblock %}
+{% block content %}
+<h1>Permisos del Sidebar</h1>
+<p>Activa o desactiva las opciones del menú lateral para cada rol.</p>
+<form method="post">
+  {% csrf_token %}
+  {% for rd in roles_data %}
+    <fieldset style="margin:1rem 0;padding:1rem;border:1px solid #ddd;">
+      <legend style="font-weight:700;">Rol: {{ rd.role }}</legend>
+      {% for opt in rd.options %}
+        <label style="display:block;margin:.25rem 0;">
+          <input type="checkbox" name="{{ rd.role }}__{{ opt.key }}" {% if opt.checked %}checked{% endif %}>
+          {{ opt.label }}
+        </label>
+      {% endfor %}
+    </fieldset>
+  {% endfor %}
+  <button type="submit" class="btn">Guardar cambios</button>
+  <a href="{% url 'dashboard_admin' %}" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

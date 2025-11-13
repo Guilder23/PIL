@@ -19,4 +19,7 @@ urlpatterns = [
     path('usuarios/<int:user_id>/editar/', views.usuarios_update, name='usuarios_update'),
     path('usuarios/<int:user_id>/eliminar/', views.usuarios_delete, name='usuarios_delete'),
     path('usuarios/<int:user_id>/password/', views.usuarios_change_password, name='usuarios_change_password'),
-]
+
+    # Permisos de sidebar (solo ADMIN)
+    path('permisos/', views.permisos_sidebar, name='permisos_sidebar'),
+ ]

@@ -40,8 +40,14 @@
   <div class="layout">
     <aside class="sidebar">
       {% block sidebar %}
-      <a href="{% url 'home' %}">Inicio</a>
-      <a href="{% url 'dashboard' %}">Dashboard</a>
+      {% if sidebar_items %}
+        {% for item in sidebar_items %}
+          <a href="{{ item.href }}">{{ item.label }}</a>
+        {% endfor %}
+      {% else %}
+        <a href="{% url 'home' %}">Inicio</a>
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+      {% endif %}
       {% endblock %}
     </aside>
     <main class="content">

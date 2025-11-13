@@ -1,13 +1,5 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard Administrador{% endblock %}
-{% block sidebar %}
-  <a href="{% url 'dashboard_admin' %}">Resumen</a>
-  <a href="{% url 'usuarios_list' %}">Gestión de Usuarios</a>
-  <a href="#">Inventario</a>
-  <a href="#">Pedidos</a>
-  <a href="#">Rutas</a>
-  <a href="#">Reportes</a>
-{% endblock %}
 {% block content %}
 <h2>Panel del Administrador</h2>
 <p>Bienvenido, gestiona usuarios, inventario, pedidos, rutas y reportes.</p>
