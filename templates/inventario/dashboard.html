@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Inventario{% endblock %}
+{% block content %}
+<h1>Inventario</h1>
+<p>Total de productos: {{ productos|length }} | Stock total: {{ total_stock }}</p>
+<div style="margin: 1rem 0;">
+  <a href="{% url 'productos_list' %}" class="btn">Gestionar Productos</a>
+  <a href="{% url 'movimientos_list' %}" class="btn">Ver Movimientos</a>
+  <a href="{% url 'movimiento_entrada' %}" class="btn">Registrar Entrada</a>
+  <a href="{% url 'movimiento_salida' %}" class="btn">Registrar Salida</a>
+  <a href="{% url 'movimiento_ajuste' %}" class="btn">Registrar Ajuste</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Categoría</th>
+      <th>Unidad</th>
+      <th>Activo</th>
+      <th>Stock</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in productos %}
+    <tr>
+      <td>{{ p.nombre }}</td>
+      <td>{{ p.categoria }}</td>
+      <td>{{ p.unidad_medida }}</td>
+      <td>{{ p.activo|yesno:"Sí,No" }}</td>
+      <td>{{ p.stock }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No hay productos registrados.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

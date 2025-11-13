@@ -6,6 +6,9 @@ from django.contrib import messages
 from .forms import RegistroUsuarioForm
 from .models import PerfilUsuario, SidebarPermission
 from .menus import MENU_DEFS
+from .models import Producto, InventarioMovimiento
+from .forms import ProductForm, MovimientoForm
+from django.urls import reverse
 
 # Create your views here.
 
@@ -180,3 +183,97 @@ def permisos_sidebar(request):
         data.append({ 'role': role, 'options': opts })
 
     return render(request, 'admin/permisos.html', { 'roles_data': data })
+
+
+@login_required
+@role_required('ADMIN')
+def inventario_dashboard(request):
+    productos = Producto.objects.all().order_by('nombre')
+    total_stock = sum([p.stock for p in productos]) if productos else 0
+    return render(request, 'inventario/dashboard.html', {
+        'productos': productos,
+        'total_stock': total_stock,
+    })
+
+
+@login_required
+@role_required('ADMIN')
+def productos_list(request):
+    productos = Producto.objects.all().order_by('nombre')
+    return render(request, 'inventario/productos/list.html', {'productos': productos})
+
+
+@login_required
+@role_required('ADMIN')
+def producto_create(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto creado correctamente.')
+            return redirect('productos_list')
+    else:
+        form = ProductForm()
+    return render(request, 'inventario/productos/form.html', {'form': form, 'accion': 'Crear'})
+
+
+@login_required
+@role_required('ADMIN')
+def producto_update(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=producto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto actualizado correctamente.')
+            return redirect('productos_list')
+    else:
+        form = ProductForm(instance=producto)
+    return render(request, 'inventario/productos/form.html', {'form': form, 'accion': 'Editar'})
+
+
+@login_required
+@role_required('ADMIN')
+def producto_delete(request, pk):
+    producto = get_object_or_404(Producto, pk=pk)
+    if request.method == 'POST':
+        producto.delete()
+        messages.success(request, 'Producto eliminado.')
+        return redirect('productos_list')
+    return render(request, 'inventario/productos/confirm_delete.html', {'object': producto, 'volver': reverse('productos_list')})
+
+
+@login_required
+@role_required('ADMIN')
+def movimientos_list(request):
+    movimientos = InventarioMovimiento.objects.select_related('producto').order_by('-creado_en')[:200]
+    return render(request, 'inventario/movimientos/list.html', {'movimientos': movimientos})
+
+
+@login_required
+@role_required('ADMIN')
+def movimiento_create(request, tipo=None):
+    if request.method == 'POST':
+        form = MovimientoForm(request.POST)
+        if form.is_valid():
+            mov = form.save(commit=False)
+            if tipo:
+                mov.tipo = tipo
+            mov.usuario = request.user
+            try:
+                mov.save()
+                messages.success(request, 'Movimiento registrado.')
+                return redirect('movimientos_list')
+            except Exception as e:
+                messages.error(request, f'Error: {e}')
+    else:
+        initial = { 'tipo': tipo } if tipo else None
+        form = MovimientoForm(initial=initial)
+    return render(request, 'inventario/movimientos/form.html', {'form': form, 'tipo': tipo})
+
+
+@login_required
+@role_required('CLIENTE')
+def inventario_disponible(request):
+    productos = Producto.objects.filter(activo=True, stock__gt=0).order_by('nombre')
+    return render(request, 'inventario/disponible.html', {'productos': productos})

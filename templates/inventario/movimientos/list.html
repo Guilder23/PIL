@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Movimientos{% endblock %}
+{% block content %}
+<h1>Movimientos de Inventario</h1>
+<div style="margin-bottom:1rem;">
+  <a href="{% url 'movimiento_entrada' %}" class="btn">Registrar Entrada</a>
+  <a href="{% url 'movimiento_salida' %}" class="btn">Registrar Salida</a>
+  <a href="{% url 'movimiento_ajuste' %}" class="btn">Registrar Ajuste</a>
+  <a href="{% url 'inventario_dashboard' %}" class="btn">Volver al Inventario</a>
+</div>
+<table>
+  <thead>
+    <tr>
+      <th>Fecha</th>
+      <th>Producto</th>
+      <th>Tipo</th>
+      <th>Cantidad</th>
+      <th>Referencia</th>
+      <th>Usuario</th>
+      <th>Nota</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in movimientos %}
+    <tr>
+      <td>{{ m.creado_en }}</td>
+      <td>{{ m.producto.nombre }}</td>
+      <td>{{ m.tipo }}</td>
+      <td>{{ m.cantidad }}</td>
+      <td>{{ m.referencia }}</td>
+      <td>{{ m.usuario }}</td>
+      <td>{{ m.nota }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7">No hay movimientos registrados.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

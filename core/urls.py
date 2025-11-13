@@ -22,4 +22,17 @@ urlpatterns = [
 
     # Permisos de sidebar (solo ADMIN)
     path('permisos/', views.permisos_sidebar, name='permisos_sidebar'),
- ]
+    path('inventario/', views.inventario_dashboard, name='inventario_dashboard'),
+    path('inventario/productos/', views.productos_list, name='productos_list'),
+    path('inventario/productos/nuevo/', views.producto_create, name='producto_create'),
+    path('inventario/productos/<int:pk>/editar/', views.producto_update, name='producto_update'),
+    path('inventario/productos/<int:pk>/eliminar/', views.producto_delete, name='producto_delete'),
+
+    path('inventario/movimientos/', views.movimientos_list, name='movimientos_list'),
+    path('inventario/movimientos/nuevo/', views.movimiento_create, name='movimiento_create'),
+    path('inventario/movimientos/entrada/', views.movimiento_create, { 'tipo': 'ENTRADA' }, name='movimiento_entrada'),
+    path('inventario/movimientos/salida/', views.movimiento_create, { 'tipo': 'SALIDA' }, name='movimiento_salida'),
+    path('inventario/movimientos/ajuste/', views.movimiento_create, { 'tipo': 'AJUSTE' }, name='movimiento_ajuste'),
+
+    path('inventario/disponible/', views.inventario_disponible, name='inventario_disponible'),
+]

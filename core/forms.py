@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import PerfilUsuario
+from .models import Producto, InventarioMovimiento
 
 class RegistroUsuarioForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -69,3 +70,29 @@ class AdminUserPasswordForm(forms.Form):
         if cleaned.get('password1') != cleaned.get('password2'):
             raise forms.ValidationError('Las contraseñas no coinciden.')
         return cleaned
+
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ["nombre", "categoria", "unidad_medida", "activo", "stock"]
+        widgets = {
+            "nombre": forms.TextInput(attrs={"class": "form-control"}),
+            "categoria": forms.TextInput(attrs={"class": "form-control"}),
+            "unidad_medida": forms.TextInput(attrs={"class": "form-control"}),
+            "activo": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "stock": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+        }
+
+
+class MovimientoForm(forms.ModelForm):
+    class Meta:
+        model = InventarioMovimiento
+        fields = ["producto", "tipo", "cantidad", "referencia", "nota"]
+        widgets = {
+            "producto": forms.Select(attrs={"class": "form-control"}),
+            "tipo": forms.Select(attrs={"class": "form-control"}),
+            "cantidad": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+            "referencia": forms.TextInput(attrs={"class": "form-control"}),
+            "nota": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+        }
