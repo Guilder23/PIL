@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}gestionPIL{% endblock %}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="icon" href="/static/favicon.ico">
+  <style>
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    .sidebar { background: #0b5fff; color: #fff; padding: 1rem; }
+    .sidebar a { display:block; color:#fff; text-decoration:none; margin:.5rem 0; }
+    .content { padding: 1.5rem; }
+    .topbar { background:#fff; border-bottom:1px solid #ddd; padding:.75rem 1rem; display:flex; justify-content:space-between; }
+    .brand { font-weight:700; color:#0b5fff; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">PIL Cochabamba</div>
+    <div>
+      {% if user.is_authenticated %}
+        <span>Hola, {{ user.username }}</span> |
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" style="background:none;border:none;color:#0b5fff;cursor:pointer;padding:0;">Salir</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Ingresar</a> | <a href="{% url 'register' %}">Crear cuenta</a>
+      {% endif %}
+    </div>
+  </div>
+  {% if messages %}
+    <div style="padding:.5rem 1rem;">
+      {% for message in messages %}
+        <div style="background:#eef7ff;border:1px solid #bcdfff;padding:.5rem 1rem;margin:.25rem 0;">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="layout">
+    <aside class="sidebar">
+      {% block sidebar %}
+      <a href="{% url 'home' %}">Inicio</a>
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      {% endblock %}
+    </aside>
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

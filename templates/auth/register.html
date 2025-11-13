@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Crear cuenta{% endblock %}
+{% block content %}
+<h2>Crear cuenta</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div>
+    <label>Usuario</label>
+    {{ form.username }}
+    {% for error in form.username.errors %}
+      <div style="color:#b00020;">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    <label>Email</label>
+    {{ form.email }}
+    {% for error in form.email.errors %}
+      <div style="color:#b00020;">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    <label>Contraseña</label>
+    {{ form.password1 }}
+    {% for error in form.password1.errors %}
+      <div style="color:#b00020;">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    <label>Confirmar contraseña</label>
+    {{ form.password2 }}
+    {% for error in form.password2.errors %}
+      <div style="color:#b00020;">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <div>
+    <label>Rol</label>
+    {{ form.role }}
+    {% for error in form.role.errors %}
+      <div style="color:#b00020;">{{ error }}</div>
+    {% endfor %}
+  </div>
+  <button type="submit">Registrarme</button>
+</form>
+<p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Ingresar</a></p>
+{% endblock %}

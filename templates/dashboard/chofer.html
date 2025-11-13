@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard Chofer{% endblock %}
+{% block sidebar %}
+  <a href="{% url 'dashboard_chofer' %}">Resumen</a>
+  <a href="#">Pedidos asignados</a>
+  <a href="#">Ruta automática</a>
+  <a href="#">Confirmar entrega</a>
+  <a href="#">Evidencias</a>
+  <a href="#">Reportes de clientes</a>
+{% endblock %}
+{% block content %}
+<h2>Panel del Chofer</h2>
+<p>Consulta tus pedidos y rutas, confirma entregas y sube evidencias.</p>
+{% endblock %}
